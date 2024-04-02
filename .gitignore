@@ -1,8 +1,7 @@
 # Directorios
 /node_modules/
 /dist/
-/coverage/
-/public/uploads/
+/mongo-db
 
 # Archivos
 *.env
