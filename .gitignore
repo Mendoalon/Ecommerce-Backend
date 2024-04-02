@@ -1,0 +1,23 @@
+# Directorios
+/node_modules/
+/dist/
+/coverage/
+/public/uploads/
+
+# Archivos
+*.env
+*.log
+*.pid
+*.tmp
+*.sock
+.DS_Store
+package-lock.json
+
+# Archivos de configuración específicos del IDE
+/.idea/
+/.vscode/
+
+# Archivos de prueba
+/test/
+**/__tests__/
+**/__mocks__/
