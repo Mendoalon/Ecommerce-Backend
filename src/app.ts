@@ -3,28 +3,23 @@ import { Server } from './application/server';
 import { envs } from './config/envs';
 import { MongoDatabase } from './infrastructure';
 
-const main = async () => {
-  // Inicialización de la base de datos
-  await MongoDatabase.connect({
-    dbName: envs.MONGO_DB_NAME,
-    mongoUrl: envs.MONGO_URL,
-  });
 
-  // Inicio de nuestro servidor
-  const server = new Server({
-    port: envs.PORT,
-    routes: AppRoutes.routes,
-  });
 
+(async () => {
   try {
-    await server.start();
-  } catch (error) {
-    console.error('Error al iniciar la aplicación:', error);
-    // Optionally perform additional error handling (e.g., logging, retrying)
-  }
-};
+      // Inicialización de la base de datos
+       await MongoDatabase.connect({
+           dbName: envs.MONGO_DB_NAME,
+           mongoUrl: envs.MONGO_URL,
+       });
 
-main().catch((error) => {
-  console.error('Error al iniciar la aplicación:', error);
-  // Handle any errors that reach this point (e.g., configuration issues)
-});
+      // Inicio de nuestro servidor
+      new Server({
+          port: envs.PORT,
+          routes: AppRoutes.routes
+      }).start();
+      
+  } catch (error) {
+      console.error("Error during app initialization:", error);
+  }
+})();

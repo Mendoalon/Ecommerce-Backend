@@ -1,14 +1,13 @@
-version: '3'
+version: '3.8'
 
 services:
-  mongo_db:
-    container_name: database_container 
+  mongo-db:
     image: mongo:latest
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo-admin
-      MONGO_INITDB_ROOT_PASSWORD: 5abc0e832a2279f2c1b32bbfec2637676184dd85
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
     volumes:
-      - ./mongo-db:/data/db
+      - ./mongo:/data/db
     ports:
       - 27017:27017
