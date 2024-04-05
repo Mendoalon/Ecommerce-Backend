@@ -17,12 +17,13 @@ export class AuthController {
   };
 
   registerUser = async (req: Request<UserDtoValidator>, res: Response) => {
-    const [error, userDto] = UserDtoValidator.create(req.body);
-    if (error) return res.status(500).json({ error: "Internal server error" });
-
-    if(!userDto) return res.status(400).json({ error: "Bad request" });
-    
     try {
+      const userDto = UserDtoValidator.create(req.body);
+      const isEmailAvailable = await this.authService.isEmailAvailable(userDto.email);
+      if (!isEmailAvailable) {
+        throw CustomError.badRequest("Email already exists");
+      }
+
       await this.authService.registerUser(userDto);
       res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
