@@ -1,36 +1,43 @@
-import express, { Router } from 'express';
+import express, { Router } from "express";
 
-interface ServerOptions {
-  port?: number;
+interface Options {
+  port: number;
   routes: Router;
+  public_path?: string;
 }
 
 export class Server {
-  public readonly app: express.Application;
+  public readonly app = express();
+  private serverListener?: any;
   private readonly port: number;
+  private readonly publicPath: string;
   private readonly routes: Router;
 
-
-  constructor(options: ServerOptions) {
-    const { port = 3100, routes } = options;
-
+  constructor(options: Options) {
+    const { port, routes, public_path = "public" } = options;
     this.port = port;
+    this.publicPath = public_path;
     this.routes = routes;
-
-    this.app = express();
   }
+ 
+  async start() {
+    //* Middlewares
+    this.app.use(express.json()); // Aceptar y debolver archivos: json
+    this.app.use(express.urlencoded({ extended: true })); // Aceptar y debolver archivos: x-www-form-urlencoded
 
-  async start(): Promise<void> {
-    // Middlewares
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    //* Public Folder
+    this.app.use(express.static(this.publicPath));
 
-    // Usar las rutas definidas
+    //* Rutas definidas.
     this.app.use(this.routes);
 
-    // Iniciar el servidor
-    await this.app.listen(console.log(`Server ${this.port}`));
+    //Servidor escuchando
+    this.serverListener = this.app.listen(this.port, () => {
+      console.log(`Server running on port ${this.port}`);
+    });
+  }
 
-
+  public close() {
+    this.serverListener?.close();
   }
 }

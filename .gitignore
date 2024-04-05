@@ -1,7 +1,7 @@
 # Directorios
 /node_modules/
 /dist/
-/mongo-db
+/mongo
 
 # Archivos
 *.env
